@@ -3,7 +3,6 @@ import { API_URL } from "@/config/index";
 import Link from "next/link";
 import EventItem from "@/components/EventItem";
 export default function Home({ events }) {
-  console.log(events);
   return (
     <Layout>
       {" "}
@@ -22,12 +21,12 @@ export default function Home({ events }) {
 }
 
 export async function getStaticProps() {
-  const res = await fetch(`${API_URL}/api/events`);
+  const res = await fetch(`${API_URL}/api/events?populate=*&_limit=1`);
 
   const events = await res.json();
 
   return {
-    props: { events: events.slice(0, 3) },
+    props: { events: events.data },
     revalidate: 1,
   };
 }
