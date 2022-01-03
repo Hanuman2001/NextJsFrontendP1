@@ -4,10 +4,25 @@ import Image from "next/image";
 import Layout from "@/components/Layout";
 import { API_URL } from "@/config/index";
 import styles from "@/styles/Event.module.css";
+import { toast, ToastContainer } from "react-toastify";
+import { useRouter } from "next/router";
 
 export default function EventPage({ evt }) {
-  const deleteEvent = (e) => {
-    console.log("delete");
+  const router = useRouter();
+  const deleteEvent = async (e) => {
+    if (confirm("Are You Sure ?")) {
+      const res = await fetch(`${API_URL}/api/events/${evt.id}`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+      } else {
+        router.push("/events");
+      }
+    }
   };
 
   return (
@@ -30,7 +45,8 @@ export default function EventPage({ evt }) {
             {evt.attributes.time}
           </span>
           <h1>{evt.attributes.name}</h1>
-          {evt.attributes.image && (
+          <ToastContainer />
+          {evt.attributes.image.data && (
             <div className={styles.image}>
               <Image
                 src={evt.attributes.image.data.attributes.formats.medium.url}

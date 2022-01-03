@@ -9,7 +9,7 @@ export default function Home({ events }) {
       <h1>Upcoming Events</h1>
       {events.length === 0 && <h3>No Events Found </h3>}
       {events.map((evt) => (
-        <EventItem id={evt.id} evt={evt} />
+        <EventItem key={evt.id} evt={evt} />
       ))}
       {events.length > 0 && (
         <Link href={`/events`}>
